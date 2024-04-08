@@ -23,13 +23,17 @@ if (!isset($_POST['seat_id'])) {
 
 $seat_id = $_POST['seat_id'];
 
-$sql = "SELECT * FROM seat_bookings WHERE seat_id = '$seat_id'";
+$sql = "SELECT * FROM seat_bookings AS sb
+        INNER JOIN seats AS s ON sb.seat_id = s.seat_id
+        WHERE sb.seat_id = '$seat_id' AND s.availability = 0";
+
 $result = mysqli_query($CON, $sql);
 
 if (mysqli_num_rows($result) > 0) {
+
     echo json_encode([
         "success" => false,
-        "message" => "Seat is already booked!"
+        "message" => "Seat is already booked or not available!"
     ]);
     die();
 }

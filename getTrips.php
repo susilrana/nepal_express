@@ -1,8 +1,6 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-if (!isset($_GET['token'])) {
+
+if (!isset($_POST['token'])) {
     echo json_encode([
         "success" => false,
         "message" => "Token not found!"
@@ -12,13 +10,13 @@ if (!isset($_GET['token'])) {
 include "./database/connection.php";
 include "./helpers/auth.php";
 
-$token = $_GET['token'];
+$token = $_POST['token'];
 
 // $is_hospital = isHospital($token);
 // $hospital_Id = getUserId($token);
 
 $sql = '';
-$sql = "SELECT * from trips where isDeleted = 0";
+$sql = "SELECT * from trips";
 
 global $CON;
 

@@ -42,10 +42,12 @@ if (isset($_POST['seat_booking_id'], $_POST['remarks'])) {
     $sql = "update seat_bookings set status = 'paid' where seat_booking_id = $seat_booking_id";
     $result = mysqli_query($CON, $sql);
 
+
+
     if (!$result) {
         echo json_encode([
             "success" => false,
-            "message" => "Something went wrong"
+            "message" => "Database error: " . mysqli_error($CON)
         ]);
     } else {
         echo json_encode([

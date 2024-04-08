@@ -23,7 +23,14 @@ $sql = '';
 if ($is_agency) {
     $sql = "SELECT buses.*,trips.*,users.full_name as agency_name, users.email as agency_email, users.address as agency_address FROM buses join users on buses.agency_id = users.user_id join trips on buses.trip_id = trips.trip_id where agency_id = $agency_Id";
 } else {
-    $sql = "SELECT buses.*,trips.*,users.full_name as agency_name, users.email as agency_email, users.address as agency_address FROM buses join users on buses.agency_id = users.user_id join trips on buses.trip_id = trips.trip_id  where isDeleted=0";
+    $sql = "SELECT buses.*, trips.*, users.full_name AS agency_name, users.email AS agency_email, users.address AS agency_address
+    FROM buses
+    JOIN users ON buses.agency_id = users.user_id
+    JOIN trips ON buses.trip_id = trips.trip_id
+    WHERE buses.isDeleted = 0
+    LIMIT 0, 25;
+    ";
+
 }
 
 global $CON;
