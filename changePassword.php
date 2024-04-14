@@ -3,6 +3,14 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
+
+if (!isset($_POST['token'])) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Token not found!"
+    ]);
+    die();
+}
 include "./database/connection.php";
 
 if (

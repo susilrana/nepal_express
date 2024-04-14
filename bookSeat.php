@@ -9,7 +9,7 @@ if (!isset($_POST['token'])) {
 
 include "./database/connection.php";
 include "./helpers/auth.php";
-
+include "./helpers/notify.php";
 $token = $_POST['token'];
 $user_id = getUserId($token);
 
@@ -28,6 +28,10 @@ $sql = "SELECT * FROM seat_bookings AS sb
         WHERE sb.seat_id = '$seat_id' AND s.availability = 0";
 
 $result = mysqli_query($CON, $sql);
+
+
+
+
 
 if (mysqli_num_rows($result) > 0) {
 
@@ -49,7 +53,14 @@ if (mysqli_num_rows($result) == 0) {
     ]);
     die();
 }
+$seat = mysqli_fetch_assoc($result);
 
+$seatNumber = $seat['seatNumber'];
+    $title = "Seat booking made successfully.";
+    $description = "Your booking for seat number $seatNumber has been made successfully!";
+    $user_id = getUserId($token);
+
+    sendNotification($title, $description, $user_id);
 
 $updateSql = "UPDATE seats SET availability = 0 WHERE seat_id = '$seat_id'";
 if (mysqli_query($CON, $updateSql)) {
