@@ -48,7 +48,7 @@ if (isset($_POST['name'], $_POST['fair'], $_POST['trip_id'], $_FILES['avatar'], 
     if ($avatar_size > 1000000) {
         echo json_encode([
             "success" => false,
-            "message" => "Image size should be less than 1MB!"
+            "message" => "Image size is larger than the limit.The size should be less than 1MB!"
         ]);
         die();
     }

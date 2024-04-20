@@ -26,20 +26,37 @@ global $CON;
 if (isset($_POST['bus_id'])) {
     $bus_id = $_POST['bus_id'];
 
-    $sql = "UPDATE buses SET isBookable = 1 WHERE id = '$bus_id'";
+    // Check the current value of isBookable
+    $checkSql = "SELECT isBookable FROM buses WHERE id = '$bus_id'";
+    $checkResult = mysqli_query($CON, $checkSql);
 
-    $result = mysqli_query($CON, $sql);
+    if ($checkResult) {
+        $row = mysqli_fetch_assoc($checkResult);
+        $isBookable = $row['isBookable'];
 
-    if (!$result) {
-        echo json_encode([
-            "success" => false,
-            "message" => "Failed to update bus bookability!"
-        ]);
-        die();
+        // Toggle the value of isBookable
+        $newIsBookable = $isBookable == 1 ? 0 : 1;
+
+        $updateSql = "UPDATE buses SET isBookable = '$newIsBookable' WHERE id = '$bus_id'";
+        $updateResult = mysqli_query($CON, $updateSql);
+
+        if (!$updateResult) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Failed to update bus bookability!"
+            ]);
+            die();
+        } else {
+            echo json_encode([
+                "success" => true,
+                "message" => "Bus bookability updated successfully!"
+            ]);
+            die();
+        }
     } else {
         echo json_encode([
-            "success" => true,
-            "message" => "Bus bookability updated successfully!"
+            "success" => false,
+            "message" => "Failed to fetch bus data!"
         ]);
         die();
     }
@@ -50,3 +67,4 @@ if (isset($_POST['bus_id'])) {
     ]);
     die();
 }
+
